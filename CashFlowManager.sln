@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36804.6 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashFlowManager", "CashFlowManager\CashFlowManager.csproj", "{30EC69DA-05B6-414D-851F-1DB4DD23640A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{30EC69DA-05B6-414D-851F-1DB4DD23640A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30EC69DA-05B6-414D-851F-1DB4DD23640A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30EC69DA-05B6-414D-851F-1DB4DD23640A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30EC69DA-05B6-414D-851F-1DB4DD23640A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {92AF3C50-645F-4EE8-A97B-B491882D5F2D}
+	EndGlobalSection
+EndGlobal
