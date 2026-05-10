@@ -24,7 +24,9 @@ namespace CashFlowManager.Services
         // Unique category names enforced via HashSet 
         private readonly HashSet<string> _categoryNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        // ─── Read-Only Access ───
+       
+        
+        // -Read-Only Access ───
 
       
         // Returns a read-only view of all transactions.
@@ -40,7 +42,7 @@ namespace CashFlowManager.Services
             return _categoryNames;
         }
 
-        // ─── Add / Remove ────
+        // ─Add / Remove ────
 
       
         // Adds a transaction to both the master list and the monthly dictionary.
@@ -78,7 +80,7 @@ namespace CashFlowManager.Services
             }
         }
 
-        // ─── Monthly Queries ─────
+        // Monthly Queries ─────
 
        
         // Returns all transactions for a given month, or empty list if none exist.
