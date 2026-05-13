@@ -8,6 +8,8 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml;
+using JsonException = Newtonsoft.Json.JsonException;
+using Formatting = Newtonsoft.Json.Formatting;
 
 namespace CashFlowManager.Services
 {
@@ -149,7 +151,7 @@ namespace CashFlowManager.Services
             }
         }
 
-        // ─── File Management Helpers ────────────────────────────────────────
+        // ─── File Management Helpers 
 
         
         // Checks whether a saved data file already exists on disk.
@@ -178,7 +180,7 @@ namespace CashFlowManager.Services
         }
     }
 
-    // ─── DTO for transactions (Data Transfer Object) ──
+    // ─── DTO for transactions (Data Transfer Object)
 
     /// <summary>
     /// A plain serializable class used exclusively for JSON read/write.
