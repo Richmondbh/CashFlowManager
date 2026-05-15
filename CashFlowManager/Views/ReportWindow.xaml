@@ -1,0 +1,318 @@
+﻿<Window x:Class="CashFlowManager.Views.ReportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CashFlowManager.Views"
+        xmlns:helpers="clr-namespace:CashFlowManager.Helpers"
+        mc:Ignorable="d"
+        Title="ReportWindow" Height="450" Width="800">
+
+    <Window.Resources>
+
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Background"      Value="#2196F3"/>
+            <Setter Property="Foreground"      Value="White"/>
+            <Setter Property="Padding"         Value="12,6"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="FontWeight"      Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1976D2"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#BDBDBD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background"   Value="White"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding"      Value="16"/>
+            <Setter Property="Margin"       Value="0,0,0,10"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="6" ShadowDepth="1"
+                                      Opacity="0.12" Color="Black"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SectionHeader" TargetType="TextBlock">
+            <Setter Property="FontSize"   Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#424242"/>
+            <Setter Property="Margin"     Value="0,0,0,10"/>
+        </Style>
+
+        <Style x:Key="FieldLabel" TargetType="TextBlock">
+            <Setter Property="FontSize"   Value="11"/>
+            <Setter Property="Foreground" Value="#757575"/>
+            <Setter Property="Margin"     Value="0,0,0,3"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Padding"         Value="6,4"/>
+            <Setter Property="BorderBrush"     Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background"      Value="#FAFAFA"/>
+        </Style>
+
+      
+     
+        <helpers:InverseBoolToVisibilityConverter x:Key="InverseBoolToVis"/>
+
+    </Window.Resources>
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Month picker -->
+            <RowDefinition Height="Auto"/>
+            <!-- Report heading -->
+            <RowDefinition Height="*"/>
+            <!-- Report content -->
+            <RowDefinition Height="Auto"/>
+            <!-- Status bar -->
+        </Grid.RowDefinitions>
+
+        <!--  MONTH PICKER -->
+        <Border Grid.Row="0" Style="{StaticResource Card}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                    <TextBlock Text="Select Month" Style="{StaticResource FieldLabel}"/>
+                    <ComboBox ItemsSource="{Binding AvailableMonths}"
+                              SelectedItem="{Binding SelectedMonth}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding StringFormat='MMMM yyyy'}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        Content="📊  Generate Report"
+                        Style="{StaticResource PrimaryButton}"
+                        VerticalAlignment="Bottom"
+                        Command="{Binding GenerateReportCommand}"/>
+            </Grid>
+        </Border>
+
+        <!--  REPORT HEADING -->
+        <Border Grid.Row="1"
+                Background="#1565C0"
+                CornerRadius="6"
+                Padding="16,12"
+                Margin="0,0,0,10"
+                Visibility="{Binding HasReportData, Converter={StaticResource BoolToVis}}">
+            <StackPanel>
+                <TextBlock Text="{Binding ReportMonth}"
+                           FontSize="18" FontWeight="Bold"
+                           Foreground="White"/>
+                <TextBlock Text="Monthly Cash-Flow Report"
+                           FontSize="11" Foreground="#90CAF9"/>
+            </StackPanel>
+        </Border>
+
+        <!--  REPORT CONTENT  -->
+        <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto"
+                      Visibility="{Binding HasReportData, Converter={StaticResource BoolToVis}}">
+            <StackPanel>
+
+                <!-- CASH-FLOW SUMMARY CARD -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="Cash-Flow Summary" Style="{StaticResource SectionHeader}"/>
+
+                        <!-- Revenue row -->
+                        <Grid Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <Border Width="4" Background="#4CAF50"
+                                        CornerRadius="2" Margin="0,0,8,0"/>
+                                <TextBlock Text="Total Revenue"
+                                           FontWeight="SemiBold" Foreground="#388E3C"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding ReportRevenue, StringFormat=C}"
+                                       FontWeight="Bold" FontSize="14"
+                                       Foreground="#388E3C"/>
+                        </Grid>
+
+                        <!-- Expense row -->
+                        <Grid Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <Border Width="4" Background="#F44336"
+                                        CornerRadius="2" Margin="0,0,8,0"/>
+                                <TextBlock Text="Total Expenses"
+                                           FontWeight="SemiBold" Foreground="#D32F2F"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding ReportExpense, StringFormat=C}"
+                                       FontWeight="Bold" FontSize="14"
+                                       Foreground="#D32F2F"/>
+                        </Grid>
+
+                        <Separator Margin="0,4,0,8"/>
+
+                        <!-- Net cash-flow row -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <Border Width="4" Background="#2196F3"
+                                        CornerRadius="2" Margin="0,0,8,0"/>
+                                <TextBlock Text="{Binding CashFlowLabel}"
+                                           FontWeight="Bold" FontSize="14"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding ReportNetCashFlow, StringFormat=C}"
+                                       FontWeight="Bold" FontSize="16"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- TOP 3 EXPENSES CARD -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <Border Width="4" Background="#F44336"
+                                    CornerRadius="2" Margin="0,0,8,0"/>
+                            <TextBlock Text="Top 3 Expense Categories"
+                                       Style="{StaticResource SectionHeader}"
+                                       Margin="0"/>
+                        </StackPanel>
+
+                        <!-- Empty state -->
+                        <TextBlock Text="No expense data for this month."
+                                   Foreground="#9E9E9E" FontStyle="Italic"
+                                   Visibility="{Binding TopExpenses.Count,
+                                       Converter={StaticResource BoolToVis}}"/>
+
+                        <ItemsControl ItemsSource="{Binding TopExpenses}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding CategoryName}"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding Total, StringFormat=C}"
+                                                   Foreground="#D32F2F"
+                                                   FontWeight="Bold"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+
+                <!-- TOP 3 REVENUES CARD -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <Border Width="4" Background="#4CAF50"
+                                    CornerRadius="2" Margin="0,0,8,0"/>
+                            <TextBlock Text="Top 3 Revenue Sources"
+                                       Style="{StaticResource SectionHeader}"
+                                       Margin="0"/>
+                        </StackPanel>
+
+                        <!-- Empty state -->
+                        <TextBlock Text="No revenue data for this month."
+                                   Foreground="#9E9E9E" FontStyle="Italic"
+                                   Visibility="{Binding TopRevenues.Count,
+                                       Converter={StaticResource BoolToVis}}"/>
+
+                        <ItemsControl ItemsSource="{Binding TopRevenues}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding CategoryName}"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding Total, StringFormat=C}"
+                                                   Foreground="#388E3C"
+                                                   FontWeight="Bold"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Placeholder shown before any report is generated -->
+        <Border Grid.Row="2"
+                Style="{StaticResource Card}"
+                Visibility="{Binding HasReportData,
+                    Converter={StaticResource InverseBoolToVis}}">
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="0,40">
+                <TextBlock Text="📊" FontSize="48"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,12"/>
+                <TextBlock Text="Select a month and click Generate Report"
+                           Foreground="#9E9E9E" FontSize="13"
+                           HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ═══ STATUS BAR ════════════════════════════════════════════════ -->
+        <Border Grid.Row="3"
+                Background="#EEEEEE"
+                Padding="12,6" Margin="0,4,0,0"
+                BorderBrush="#E0E0E0" BorderThickness="0,1,0,0">
+            <TextBlock Text="{Binding StatusMessage}"
+                       FontSize="11" Foreground="#616161"/>
+        </Border>
+
+    </Grid>
+</Window>

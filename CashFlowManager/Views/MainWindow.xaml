@@ -1,25 +1,23 @@
-﻿<Window x:Class="CashFlowManager.MainWindow"
+﻿<Window x:Class="CashFlowManager.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CashFlowManager"
         mc:Ignorable="d"
         Title="Cash Flow Manager"
-        Height="450" 
-        Width="800"
+        Height="820" Width="1100"
+        MinHeight="600" MinWidth="800"
         WindowStartupLocation="CenterScreen"
         Background="#F5F5F5">
 
     <Window.Resources>
-        <!-- Base button style used throughout -->
         <Style x:Key="PrimaryButton" TargetType="Button">
-            <Setter Property="Background"   Value="#2196F3"/>
-            <Setter Property="Foreground"   Value="White"/>
-            <Setter Property="Padding"      Value="12,6"/>
+            <Setter Property="Background"      Value="#2196F3"/>
+            <Setter Property="Foreground"      Value="White"/>
+            <Setter Property="Padding"         Value="12,6"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Cursor"       Value="Hand"/>
-            <Setter Property="FontWeight"   Value="SemiBold"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="FontWeight"      Value="SemiBold"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -60,12 +58,11 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Card panel used for each section -->
         <Style x:Key="Card" TargetType="Border">
-            <Setter Property="Background"       Value="White"/>
-            <Setter Property="CornerRadius"     Value="6"/>
-            <Setter Property="Padding"          Value="16"/>
-            <Setter Property="Margin"           Value="0,0,0,10"/>
+            <Setter Property="Background"   Value="White"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding"      Value="16"/>
+            <Setter Property="Margin"       Value="0,0,0,10"/>
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect BlurRadius="6" ShadowDepth="1"
@@ -75,10 +72,10 @@
         </Style>
 
         <Style x:Key="SectionHeader" TargetType="TextBlock">
-            <Setter Property="FontSize"     Value="13"/>
-            <Setter Property="FontWeight"   Value="SemiBold"/>
-            <Setter Property="Foreground"   Value="#424242"/>
-            <Setter Property="Margin"       Value="0,0,0,10"/>
+            <Setter Property="FontSize"   Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#424242"/>
+            <Setter Property="Margin"     Value="0,0,0,10"/>
         </Style>
 
         <Style x:Key="FieldLabel" TargetType="TextBlock">
@@ -88,10 +85,10 @@
         </Style>
 
         <Style TargetType="TextBox">
-            <Setter Property="Padding"          Value="6,4"/>
-            <Setter Property="BorderBrush"      Value="#E0E0E0"/>
-            <Setter Property="BorderThickness"  Value="1"/>
-            <Setter Property="Background"       Value="#FAFAFA"/>
+            <Setter Property="Padding"         Value="6,4"/>
+            <Setter Property="BorderBrush"     Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background"      Value="#FAFAFA"/>
         </Style>
 
         <Style TargetType="ComboBox">
@@ -111,14 +108,11 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Top bar -->
             <RowDefinition Height="*"/>
-            <!-- Main content -->
             <RowDefinition Height="Auto"/>
-            <!-- Status bar -->
         </Grid.RowDefinitions>
 
-        <!-- TOP BAR  -->
+        <!-- ═══ TOP BAR ═══════════════════════════════════════════════════ -->
         <Border Grid.Row="0" Background="#1565C0" Padding="16,10">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -128,19 +122,20 @@
 
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="💰" FontSize="20" Margin="0,0,8,0"/>
-                    <TextBlock Text="Cash-Flow Manager"
+                    <TextBlock Text="Cash Flow Manager"
                                FontSize="18" FontWeight="Bold"
                                Foreground="White" VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <!-- Save / Load / Report buttons -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <Button Content="💾  Save"
                             Style="{StaticResource SuccessButton}"
+                            Margin="0,0,6,0"
                             Command="{Binding SaveCommand}"/>
                     <Button Content="📂  Load"
                             Style="{StaticResource PrimaryButton}"
                             Background="#0288D1"
+                            Margin="0,0,6,0"
                             Command="{Binding LoadCommand}"/>
                     <Button Content="📊  Report"
                             Style="{StaticResource PrimaryButton}"
@@ -154,133 +149,132 @@
         <Grid Grid.Row="1" Margin="12">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="320"/>
-                <!-- Left panel -->
                 <ColumnDefinition Width="*"/>
-                <!-- Right panel -->
             </Grid.ColumnDefinitions>
 
             <!-- ── LEFT PANEL ─────────────────────────────────────────── -->
-            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+            <ScrollViewer Grid.Column="0"
+                          Margin="0,0,10,0"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
 
-                <!-- ADD TRANSACTION CARD -->
-                <Border Style="{StaticResource Card}">
-                    <StackPanel>
-                        <TextBlock Text="Add Transaction" Style="{StaticResource SectionHeader}"/>
+                    <!-- ADD TRANSACTION CARD -->
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Add Transaction" Style="{StaticResource SectionHeader}"/>
 
-                        <TextBlock Text="Date" Style="{StaticResource FieldLabel}"/>
-                        <DatePicker SelectedDate="{Binding InputDate}" Margin="0,0,0,8"/>
+                            <TextBlock Text="Date" Style="{StaticResource FieldLabel}"/>
+                            <DatePicker SelectedDate="{Binding InputDate}" Margin="0,0,0,8"/>
 
-                        <TextBlock Text="Amount" Style="{StaticResource FieldLabel}"/>
-                        <TextBox Text="{Binding InputAmount, UpdateSourceTrigger=PropertyChanged}"
-                                 Margin="0,0,0,8"/>
+                            <TextBlock Text="Amount" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Text="{Binding InputAmount, UpdateSourceTrigger=PropertyChanged}"
+                                     Margin="0,0,0,8"/>
 
-                        <TextBlock Text="Category Name" Style="{StaticResource FieldLabel}"/>
-                        <TextBox Text="{Binding InputCategoryName, UpdateSourceTrigger=PropertyChanged}"
-                                 Margin="0,0,0,8"/>
+                            <TextBlock Text="Category Name" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Text="{Binding InputCategoryName, UpdateSourceTrigger=PropertyChanged}"
+                                     Margin="0,0,0,8"/>
 
-                        <TextBlock Text="Category Type" Style="{StaticResource FieldLabel}"/>
-                        <ComboBox ItemsSource="{Binding CategoryTypeOptions}"
-                                  SelectedItem="{Binding InputCategoryType}"
-                                  Margin="0,0,0,8"/>
+                            <TextBlock Text="Category Type" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox ItemsSource="{Binding CategoryTypeOptions}"
+                                      SelectedItem="{Binding InputCategoryType}"
+                                      Margin="0,0,0,8"/>
 
-                        <TextBlock Text="Description" Style="{StaticResource FieldLabel}"/>
-                        <TextBox Text="{Binding InputDescription, UpdateSourceTrigger=PropertyChanged}"
-                                 Margin="0,0,0,12"/>
+                            <TextBlock Text="Description" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Text="{Binding InputDescription, UpdateSourceTrigger=PropertyChanged}"
+                                     Margin="0,0,0,12"/>
 
-                        <Button Content="＋  Add Transaction"
-                                Style="{StaticResource PrimaryButton}"
-                                Command="{Binding AddTransactionCommand}"/>
-                    </StackPanel>
-                </Border>
+                            <Button Content="+  Add Transaction"
+                                    Style="{StaticResource PrimaryButton}"
+                                    Command="{Binding AddTransactionCommand}"/>
+                        </StackPanel>
+                    </Border>
 
-                <!-- CASH-FLOW SUMMARY CARD -->
-                <Border Style="{StaticResource Card}">
-                    <StackPanel>
-                        <TextBlock Text="Cash-Flow Summary" Style="{StaticResource SectionHeader}"/>
+                    <!-- CASH-FLOW SUMMARY CARD -->
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Cash-Flow Summary" Style="{StaticResource SectionHeader}"/>
 
-                        <TextBlock Text="Month" Style="{StaticResource FieldLabel}"/>
-                        <ComboBox ItemsSource="{Binding AvailableMonths}"
-                                  SelectedItem="{Binding SelectedMonth}"
-                                  Margin="0,0,0,10">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding StringFormat='MMMM yyyy'}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                            <TextBlock Text="Month" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox ItemsSource="{Binding AvailableMonths}"
+                                      SelectedItem="{Binding SelectedMonth}"
+                                      Margin="0,0,0,10">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding StringFormat='MMMM yyyy'}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
 
-                        <!-- Revenue row -->
-                        <Grid Margin="0,0,0,6">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="Total Revenue"
-                                       Foreground="#388E3C" FontWeight="SemiBold"/>
-                            <TextBlock Grid.Column="1"
-                                       Text="{Binding TotalRevenue, StringFormat=C}"
-                                       Foreground="#388E3C" FontWeight="SemiBold"/>
-                        </Grid>
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Total Revenue"
+                                           Foreground="#388E3C" FontWeight="SemiBold"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding TotalRevenue, StringFormat=C}"
+                                           Foreground="#388E3C" FontWeight="SemiBold"/>
+                            </Grid>
 
-                        <!-- Expense row -->
-                        <Grid Margin="0,0,0,6">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="Total Expenses"
-                                       Foreground="#D32F2F" FontWeight="SemiBold"/>
-                            <TextBlock Grid.Column="1"
-                                       Text="{Binding TotalExpense, StringFormat=C}"
-                                       Foreground="#D32F2F" FontWeight="SemiBold"/>
-                        </Grid>
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Total Expenses"
+                                           Foreground="#D32F2F" FontWeight="SemiBold"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding TotalExpense, StringFormat=C}"
+                                           Foreground="#D32F2F" FontWeight="SemiBold"/>
+                            </Grid>
 
-                        <Separator Margin="0,4,0,6"/>
+                            <Separator Margin="0,4,0,6"/>
 
-                        <!-- Net cash-flow row -->
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0"
-                                       Text="{Binding CashFlowLabel}"
-                                       FontSize="14" FontWeight="Bold"/>
-                            <TextBlock Grid.Column="1"
-                                       Text="{Binding NetCashFlow, StringFormat=C}"
-                                       FontSize="14" FontWeight="Bold"/>
-                        </Grid>
-                    </StackPanel>
-                </Border>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                           Text="{Binding CashFlowLabel}"
+                                           FontSize="14" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding NetCashFlow, StringFormat=C}"
+                                           FontSize="14" FontWeight="Bold"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
 
-                <!-- BUDGET CARD (Optional Feature) -->
-                <Border Style="{StaticResource Card}">
-                    <StackPanel>
-                        <TextBlock Text="Set Category Budget" Style="{StaticResource SectionHeader}"/>
+                    <!-- BUDGET CARD -->
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Set Category Budget" Style="{StaticResource SectionHeader}"/>
 
-                        <TextBlock Text="Category Name" Style="{StaticResource FieldLabel}"/>
-                        <TextBox Text="{Binding BudgetCategoryName, UpdateSourceTrigger=PropertyChanged}"
-                                 Margin="0,0,0,8"/>
+                            <TextBlock Text="Category Name" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Text="{Binding BudgetCategoryName, UpdateSourceTrigger=PropertyChanged}"
+                                     Margin="0,0,0,8"/>
 
-                        <TextBlock Text="Monthly Budget Amount" Style="{StaticResource FieldLabel}"/>
-                        <TextBox Text="{Binding BudgetAmount, UpdateSourceTrigger=PropertyChanged}"
-                                 Margin="0,0,0,10"/>
+                            <TextBlock Text="Monthly Budget Amount" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Text="{Binding BudgetAmount, UpdateSourceTrigger=PropertyChanged}"
+                                     Margin="0,0,0,10"/>
 
-                        <Button Content="✔  Set Budget"
-                                Style="{StaticResource SuccessButton}"
-                                Command="{Binding SetBudgetCommand}"/>
-                    </StackPanel>
-                </Border>
+                            <Button Content="✔  Set Budget"
+                                    Style="{StaticResource SuccessButton}"
+                                    Command="{Binding SetBudgetCommand}"/>
+                        </StackPanel>
+                    </Border>
 
-            </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+            <!-- END LEFT PANEL -->
 
             <!-- ── RIGHT PANEL ────────────────────────────────────────── -->
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <!-- Search and filter -->
                     <RowDefinition Height="*"/>
-                    <!-- Transaction list -->
                 </Grid.RowDefinitions>
 
                 <!-- SEARCH AND FILTER CARD -->
@@ -313,18 +307,16 @@
                                     <TextBox Text="{Binding SearchDescription, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                             </Grid>
-                            <StackPanel Orientation="Horizontal" Spacing="6">
+                            <StackPanel Orientation="Horizontal">
                                 <Button Content="🔍  Search"
                                         Style="{StaticResource PrimaryButton}"
+                                        Margin="0,0,6,0"
                                         Command="{Binding SearchCommand}"/>
                                 <Button Content="✖  Clear"
                                         Style="{StaticResource DangerButton}"
                                         Command="{Binding ClearSearchCommand}"/>
                             </StackPanel>
                         </StackPanel>
-
-                        <Separator Grid.Column="0" Style="{StaticResource {x:Static FrameworkElement.VerticalAlignment}}"
-                                   Visibility="Hidden"/>
 
                         <!-- Filter section -->
                         <StackPanel Grid.Column="1" Margin="10,0,0,0">
@@ -336,13 +328,8 @@
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0" Margin="0,0,6,0">
                                     <TextBlock Text="Type" Style="{StaticResource FieldLabel}"/>
-                                    <ComboBox SelectedItem="{Binding FilterType}">
-                                        <ComboBox.Items>
-                                            <x:Null/>
-                                            <models:CategoryType>Expense</models:CategoryType>
-                                            <models:CategoryType>Revenue</models:CategoryType>
-                                        </ComboBox.Items>
-                                    </ComboBox>
+                                    <ComboBox ItemsSource="{Binding FilterTypeOptions}"
+                                              SelectedItem="{Binding FilterTypeString}"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1">
                                     <TextBlock Text="Month" Style="{StaticResource FieldLabel}"/>
@@ -356,10 +343,11 @@
                                     </ComboBox>
                                 </StackPanel>
                             </Grid>
-                            <StackPanel Orientation="Horizontal" Spacing="6">
+                            <StackPanel Orientation="Horizontal">
                                 <Button Content="⚙  Filter"
                                         Style="{StaticResource PrimaryButton}"
                                         Background="#FF9800"
+                                        Margin="0,0,6,0"
                                         Command="{Binding FilterCommand}"/>
                                 <Button Content="✖  Clear"
                                         Style="{StaticResource DangerButton}"
@@ -393,7 +381,6 @@
                                     Command="{Binding DeleteTransactionCommand}"/>
                         </Grid>
 
-                        <!-- Transaction list with column headers -->
                         <ListView Grid.Row="1"
                                   ItemsSource="{Binding DisplayedTransactions}"
                                   SelectedItem="{Binding SelectedTransaction}"
@@ -415,15 +402,18 @@
                             </ListView.View>
                         </ListView>
 
-                        <!-- Transaction count footer -->
                         <TextBlock Grid.Row="2"
                                    Text="{Binding DisplayedTransactions.Count, StringFormat='Showing {0} transaction(s)'}"
                                    FontSize="11" Foreground="#9E9E9E"
                                    Margin="0,6,0,0"/>
                     </Grid>
                 </Border>
+
             </Grid>
+            <!-- END RIGHT PANEL -->
+
         </Grid>
+        <!-- END MAIN CONTENT -->
 
         <!-- ═══ STATUS BAR ════════════════════════════════════════════════ -->
         <Border Grid.Row="2" Background="#EEEEEE" Padding="12,6"

@@ -247,6 +247,26 @@ namespace CashFlowManager.ViewModels
             set => SetProperty(ref _statusMessage, value);
         }
 
+        // String options for the filter type ComboBox
+        public List<string> FilterTypeOptions { get; } = new List<string> { "All", "Expense", "Revenue" };
+
+        private string _filterTypeString = "All";
+        // Converts the string selection to a nullable CategoryType for the service
+        public string FilterTypeString
+        {
+            get => _filterTypeString;
+            set
+            {
+                SetProperty(ref _filterTypeString, value);
+                FilterType = value switch
+                {
+                    "Expense" => CategoryType.Expense,
+                    "Revenue" => CategoryType.Revenue,
+                    _ => null
+                };
+            }
+        }
+
         // ─── Commands 
 
         //Command to add a new transaction from the input form.
@@ -297,6 +317,10 @@ namespace CashFlowManager.ViewModels
                 Transaction transaction = new Transaction(InputDate, InputAmount, category, InputDescription.Trim());
 
                 _transactionService.AddTransaction(transaction);
+
+                // Captures the data before ClearInputForm resets them
+                string categoryName = InputCategoryName.Trim();
+                decimal amount = InputAmount;
 
                 // Check budget immediately after adding an expense
                 if (InputCategoryType == CategoryType.Expense)
