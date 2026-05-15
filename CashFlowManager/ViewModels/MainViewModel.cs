@@ -1,6 +1,7 @@
 ﻿using CashFlowManager.Helpers;
 using CashFlowManager.Models;
 using CashFlowManager.Services;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -316,11 +317,13 @@ namespace CashFlowManager.ViewModels
                 Category category = new Category(InputCategoryName.Trim(), InputCategoryType);
                 Transaction transaction = new Transaction(InputDate, InputAmount, category, InputDescription.Trim());
 
-                _transactionService.AddTransaction(transaction);
+              
 
                 // Captures the data before ClearInputForm resets them
                 string categoryName = InputCategoryName.Trim();
                 decimal amount = InputAmount;
+
+                _transactionService.AddTransaction(transaction);
 
                 // Check budget immediately after adding an expense
                 if (InputCategoryType == CategoryType.Expense)
@@ -331,7 +334,7 @@ namespace CashFlowManager.ViewModels
                 RefreshAvailableMonths();
                 RefreshCashFlow();
 
-                StatusMessage = $"Transaction added: {category.Name} — {InputAmount:C}";
+                StatusMessage = $"Transaction added: {categoryName} — {amount:C}";
             }
             catch (Exception ex)
             {
@@ -374,23 +377,57 @@ namespace CashFlowManager.ViewModels
         // Saves all transactions to disk via FileService and reports the outcome.
         private void ExecuteSave(object? parameter)
         {
-            (bool isSuccess, string message) = _fileService.SaveTransactions(
+            SaveFileDialog dialog = new SaveFileDialog
+            {
+                Title = "Save Transactions",
+                Filter = "JSON files (*.json)|*.json",
+                FileName = "transactions.json",
+               
+            };
+
+            if (dialog.ShowDialog() != true)
+                return;
+
+            // Create a FileService pointed at the chosen path
+            FileService fileService = new FileService(dialog.FileName);
+            (bool isSuccess, string message) = fileService.SaveTransactions(
                 _transactionService.GetAllTransactions());
 
-            StatusMessage = message;
+            // Show path in status bar, outcome in the popup
+            StatusMessage = isSuccess
+                ? $"Saved to: {dialog.FileName}"
+                : message;
 
-            if (!isSuccess)
-                MessageBox.Show(message, "Save Failed", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+            // Shows result clearly regardless of success or failure
+            MessageBox.Show(message,
+                isSuccess ? "Save Successful" : "Save Failed",
+                MessageBoxButton.OK,
+                isSuccess ? MessageBoxImage.Information : MessageBoxImage.Warning);
         }
 
     
         // Loads transactions from disk, passes them to the service, and refreshes the UI.
         private void ExecuteLoad(object? parameter)
         {
-            (bool isSuccess, string message, List<Transaction> transactions) =
-                _fileService.LoadTransactions();
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Title = "Load Transactions",
+                Filter = "JSON files (*.json)|*.json"
+            };
 
-            StatusMessage = message;
+            if (dialog.ShowDialog() != true)
+                return;
+
+            FileService fileService = new FileService(dialog.FileName);
+
+            (bool isSuccess, string message, List<Transaction> transactions) =
+                fileService.LoadTransactions();
+
+            //StatusMessage = message;
+            StatusMessage = isSuccess
+                        ? $"Loaded from: {dialog.FileName}"
+                        : message;
 
             if (isSuccess)
             {
@@ -398,6 +435,8 @@ namespace CashFlowManager.ViewModels
                 RefreshTransactionList();
                 RefreshAvailableMonths();
                 RefreshCashFlow();
+
+                MessageBox.Show(message, "Load Successful", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {

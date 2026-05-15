@@ -112,7 +112,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- ═══ TOP BAR ═══════════════════════════════════════════════════ -->
+        <!-- TOP BAR======================================== -->
         <Border Grid.Row="0" Background="#1565C0" Padding="16,10">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -145,7 +145,7 @@
             </Grid>
         </Border>
 
-        <!-- ═══ MAIN CONTENT ══════════════════════════════════════════════ -->
+        <!-- MAIN CONTENT ====================================== -->
         <Grid Grid.Row="1" Margin="12">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="320"/>
@@ -270,7 +270,7 @@
             </ScrollViewer>
             <!-- END LEFT PANEL -->
 
-            <!-- ── RIGHT PANEL ────────────────────────────────────────── -->
+            <!-- RIGHT PANEL  -->
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -415,7 +415,7 @@
         </Grid>
         <!-- END MAIN CONTENT -->
 
-        <!-- ═══ STATUS BAR ════════════════════════════════════════════════ -->
+        <!-- STATUS BAR =============== -->
         <Border Grid.Row="2" Background="#EEEEEE" Padding="12,6"
                 BorderBrush="#E0E0E0" BorderThickness="0,1,0,0">
             <TextBlock Text="{Binding StatusMessage}"
