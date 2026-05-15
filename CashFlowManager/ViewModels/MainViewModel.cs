@@ -19,6 +19,9 @@ namespace CashFlowManager.ViewModels
     public class MainViewModel : BaseViewModel
     {
         private readonly TransactionService _transactionService;
+
+        // Exposes the service so ReportWindow can share the same data
+        public TransactionService TransactionService => _transactionService;
         private readonly FileService _fileService;
 
         // ─── Constructor

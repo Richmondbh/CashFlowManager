@@ -79,7 +79,7 @@ namespace CashFlowManager.ViewModels
         }
 
         private string _cashFlowLabel = "Net Cash-Flow";
-        // Surplus or Deficit depending on whether net is positive or negative
+        // Surplus or Deficit depending on whether net it is positive or negative
         public string CashFlowLabel
         {
             get => _cashFlowLabel;

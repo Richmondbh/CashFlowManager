@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using CashFlowManager.ViewModels;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +20,16 @@ namespace CashFlowManager
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainViewModel();
+        }
+
+        // Opens the report window passing the shared TransactionService
+        private void OpenReportWindow_Click(object sender, RoutedEventArgs e)
+        {
+            MainViewModel mainVm = (MainViewModel)DataContext;
+            ReportWindow reportWindow = new ReportWindow(mainVm.TransactionService);
+            reportWindow.Owner = this;
+            reportWindow.ShowDialog();
         }
     }
 }
